@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<!-- ফোন ডিসপ্লে ফিক্সড করার জন্য user-scalable=no এবং maximum-scale=1 যুক্ত করা হয়েছে -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>Abdur Rahaman Global Travel Service</title>
+
+	<!-- Google Fonts & Font Awesome Icons -->
+	<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+	<script src="https://kit.fontawesome.com/d5b956fb36.js" crossorigin="anonymous"></script>
+
+	<!-- BOOTSTRAP 5 & AOS ANIMATION -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+	<style>
+		:root {
+			--bg-dark: #04060a;
+			--card-bg: #0b0f19;
+			--neon-cyan: #00f2fe;
+			--neon-purple: #4facfe;
+			--text-main: #ffffff;
+			--text-muted: #64748b;
+			--neon-green: #39ff14;
+		}
+
+		/* সম্পূর্ণ সাইট এবং মোবাইল ডিসপ্লে ফিক্সড রাখার গাইডলাইন */
+		html, body {
+			font-family: 'Plus Jakarta Sans', sans-serif;
+			color: var(--text-main);
+			background-color: var(--bg-dark);
+			overflow-x: hidden; /* কোনো স্ক্রল ডানে বামে যাবে না */
+			position: relative;
+			width: 100%;
+		}
+
+		/* Glowing Cyber Scrollbar */
+		::-webkit-scrollbar { width: 4px; }
+		::-webkit-scrollbar-track { background: var(--bg-dark); }
+		::-webkit-scrollbar-thumb { background: linear-gradient(var(--neon-purple), var(--neon-cyan)); border-radius: 10px; }
+
+		/* Floating Success Toast Notification Style */
+		.floating-success-box {
+			position: fixed;
+			top: 90px;
+			right: 15px;
+			z-index: 999;
+			pointer-events: none;
+			max-width: 320px;
+		}
+		.success-toast {
+			background: rgba(11, 15, 25, 0.95);
+			border: 1px solid var(--neon-green);
+			box-shadow: 0 0 15px rgba(57, 255, 20, 0.2);
+			color: #fff;
+			padding: 10px 15px;
+			border-radius: 8px;
+			margin-bottom: 8px;
+			font-size: 12px;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			animation: slideIn 0.5s ease-out, fadeOut 0.5s ease-in 3.5s forwards;
+		}
+		@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+		@keyframes fadeOut { from { opacity: 1; } to { opacity: 0; transform: translateY(-20px); } }
+
+		/* Header Styling (Zinipay Copy) */
+		.navbar {
+			background: rgba(4, 6, 10, 0.85) !important;
+			backdrop-filter: blur(20px);
+			border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+			padding: 15px 0;
+		}
+		.navbar-brand {
+			font-family: 'Orbitron', sans-serif;
+			font-size: 18px;
+			font-weight: 900;
+			letter-spacing: 1px;
+			background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple));
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+		}
+
+		/* Category Filter Tabs */
+		.filter-btn {
+			background: rgba(255, 255, 255, 0.02);
+			border: 1px solid rgba(255, 255, 255, 0.05);
+			color: #fff;
+			padding: 8px 18px;
+			border-radius: 8px;
+			font-weight: 600;
+			font-size: 13px;
+			transition: 0.3s;
+			margin: 4px;
+		}
+		.filter-btn:hover, .filter-btn.active {
+			background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple));
+			color: #000;
+			border-color: transparent;
+			box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+		}
+
+		/* Zinipay Premium Service Cards */
+		.visa-card {
+			background: var(--card-bg);
+			border: 1px solid rgba(255, 255, 255, 0.04);
+			border-radius: 16px;
+			padding: 25px;
+			transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+		}
+		.visa-card:hover {
+			transform: translateY(-5px);
+			border-color: var(--neon-cyan);
+			box-shadow: 0 12px 30px rgba(0, 242, 254, 0.12);
+		}
+		.meta-info {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 15px;
+		}
+		.time-badge {
+			background: rgba(0, 242, 254, 0.05);
+			color: var(--neon-cyan);
+			border: 1px solid rgba(0, 242, 254, 0.15);
+			padding: 4px 10px;
+			border-radius: 6px;
+			font-size: 11px;
+			font-weight: 600;
+		}
+		.cost-display {
+			font-family: 'Orbitron', sans-serif;
+			font-size: 22px;
+			font-weight: 700;
+			color: #fff;
+		}
+
+		/* Review Cards */
+		.review-card {
+			background: rgba(11, 15, 25, 0.6);
+			border: 1px solid rgba(255, 255, 255, 0.02);
+			border-radius: 16px;
+			padding: 20px;
+		}
+		.star-rating { color: #ffb800; font-size: 12px; margin-bottom: 8px; }
+
+		/* Cyber Button Style */
+		.checkout-btn {
+			background: rgba(255, 255, 255, 0.03);
+			color: #fff;
+			border: 1px solid rgba(255, 255, 255, 0.08);
+			width: 100%;
+			padding: 10px;
+			border-radius: 10px;
+			font-weight: 700;
+			font-size: 14px;
+			transition: 0.3s;
+		}
+		.visa-card:hover .checkout-btn {
+			background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple));
+			color: #000;
+			border-color: transparent;
+			box-shadow: 0 0 12px rgba(0, 242, 254, 0.3);
+		}
+
+		/* 🛠️ ছোট এআই বাটন এবং গ্লোয়িং লাইটিং ইফেক্ট 🛠️ */
+		.ai-fab-container {
+			position: fixed;
+			bottom: 25px;
+			right: 25px;
+			/* z-index সর্বোচ্চ দেওয়া হয়েছে যাতে সব কন্টেন্টের উপরে ভেসে থাকে */
+			z-index: 100000; 
+		}
+		.ai-main-btn {
+			width: 50px; /* বাটনটি ছোট করা হয়েছে */
+			height: 50px;
+			border-radius: 50%;
+			background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple));
+			border: none;
+			color: #000;
+			font-size: 18px;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: 0.4s;
+			/* গ্লোয়িং লাইটিং ইফেক্ট অ্যানিমেশন */
+			animation: neonGlowPulse 2s infinite alternate; 
+		}
+		
+		/* অনবরত লাইটিং কালার ইফেক্ট করার জন্য অ্যানিমেশন */
+		@keyframes neonGlowPulse {
+			0% {
+				box-shadow: 0 0 10px rgba(0, 242, 254, 0.5), 0 0 20px rgba(0, 242, 254, 0.3);
+			}
+			100% {
+				box-shadow: 0 0 20px rgba(79, 172, 254, 0.9), 0 0 35px rgba(79, 172, 254, 0.6);
+				transform: scale(1.03);
+			}
+		}
+
+		/* ফুল স্ক্রিন ওপরে ওপেন হওয়া স্যোশাল ড্যাশবোর্ড ওভারলে */
+		.ai-full-overlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(4, 6, 10, 0.95);
+			backdrop-filter: blur(25px);
+			z-index: 99999; /* মেইন বাটনের ঠিক নিচে কিন্তু অন্য সব কিছুর উপরে */
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			opacity: 0;
+			pointer-events: none;
+			transition: all 0.4s cubic-bezier(0.1, 0.8, 0.3, 1);
+			transform: scale(1.1);
+		}
+		.ai-full-overlay.open {
+			opacity: 1;
+			pointer-events: auto;
+			transform: scale(1);
+		}
+		.overlay-title {
+			font-family: 'Orbitron', sans-serif;
+			font-size: 18px;
+			letter-spacing: 2px;
+			color: var(--neon-cyan);
+			margin-bottom: 30px;
+			text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+		}
+		.social-grid {
+			display: grid;
+			grid-template-columns: repeat(3, 1xl);
+			gap: 20px;
+			justify-content: center;
+			max-width: 320px;
+			width: 100%;
+			padding: 10px;
+		}
+		@media (min-width: 480px) {
+			.social-grid { grid-template-columns: repeat(5, 1xl); max-width: 500px; }
+		}
+
+		.ai-sub-link {
+			width: 60px;
+			height: 60px;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: #fff;
+			font-size: 24px;
+			text-decoration: none;
+			transition: 0.3s;
+			position: relative;
+		}
+		.ai-sub-link:hover { transform: scale(1.15); filter: brightness(1.2); }
+		.link-tg { background: #26A5E4; box-shadow: 0 0 15px rgba(38,165,228,0.4); }
+		.link-wa { background: #25D366; box-shadow: 0 0 15px rgba(37,211,102,0.4); }
+		.link-fb { background: #1877F2; box-shadow: 0 0 15px rgba(24,119,242,0.4); }
+		.link-ig { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); box-shadow: 0 0 15px rgba(220,39,67,0.4); }
+		.link-yt { background: #FF0000; box-shadow: 0 0 15px rgba(255,0,0,0.4); }
+		
+		.link-label {
+			position: absolute;
+			bottom: -22px;
+			font-size: 10px;
+			color: #64748b;
+			font-weight: 600;
+			letter-spacing: 0.5px;
+		}
+	</style>
+</head>
+
+<body>
+
+	<!-- ভাসমান সাকসেস মেসেজ কন্টেইনার -->
+	<div class="floating-success-box" id="successBox"></div>
+
+	<!-- NAVBAR HEADER -->
+	<nav class="navbar navbar-expand-lg sticky-top navbar-dark">
+		<div class="container">
+			<a class="navbar-brand" href="#">ABDUR RAHAMAN GLOBAL</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#cyberGate">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse justify-content-end" id="cyberGate">
+				<ul class="navbar-nav">
+					<li class="nav-item"><a class="nav-link active" href="#">Home Node</a></li>
+					<li class="nav-item"><a class="nav-link" href="#visa-matrix">Services</a></li>
+					<li class="nav-item"><a class="nav-link" href="#reviews">Reviews</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<!-- HERO INTRO -->
+	<section class="py-5 text-center" style="margin-top: 60px;">
+		<div class="container" data-aos="fade-up">
+			<span class="badge bg-dark border border-info text-info px-3 py-2 mb-3">⚡ SECURE VERIFIED PLATFORM</span>
+			<h1 class="display-5 fw-extrabold text-white mb-2" style="font-family: 'Orbitron', sans-serif; font-size: calc(1.5rem + 1.5vw);">Abdur Rahaman Global Travel Service</h1>
+			<p class="text-muted mx-auto small px-3" style="max-width: 600px;">সরাসরি ক্যাটাগরি ফিল্টার অপশন থেকে আপনার কাঙ্ক্ষিত দেশ নির্বাচন করুন এবং স্বচ্ছ প্রসেসিং টাইম ও কস্ট ফিউচার দেখে ইন্ট্যান্ট অর্ডার সম্পন্ন করুন।</p>
+		</div>
+	</section>
+
+	<!-- CATEGORY NAVIGATION TABS -->
+	<div class="container text-center my-3" data-aos="fade-up">
+		<button class="filter-btn active" onclick="filterCategory('all', this)">All Nodes</button>
+		<button class="filter-btn" onclick="filterCategory('student', this)">Student Visa</button>
+		<button class="filter-btn" onclick="filterCategory('tourist', this)">Tourist/Visit</button>
+		<button class="filter-btn" onclick="filterCategory('work', this)">Work Permit</button>
+	</div>
+
+	<!-- 5 COUNTRY DYNAMIC SERVICE MATRIX -->
+	<section id="visa-matrix" class="container py-3">
+		<div class="row g-3">
+			<!-- 1. Canada -->
+			<div class="col-lg-4 col-md-6 mix all student work" data-aos="fade-up">
+				<div class="visa-card">
+					<div class="meta-info">
+						<span class="time-badge"><i class="fa-solid fa-clock me-1"></i> 45-60 Days</span>
+						<span class="badge bg-danger">Canada 🇨🇦</span>
+					</div>
+					<h5 class="text-white fw-bold mb-2">Canada Study & Work Processing</h5>
+					<p class="text-muted small mb-3">কানাডার প্রফেশনাল ডাটা কমপ্লায়েন্স, ইউনিভার্সিটি এলিজিবিলিটি চেক এবং ওয়ার্ক পারমিট সাপোর্টিং ফাইল কমপ্লিট সেটআপ।</p>
+					<div class="d-flex align-items-center justify-content-between mt-auto">
+						<div class="cost-display">৳ ৫০,০০০</div>
+						<button onclick="payWithPayStation(50000, 'Canada Full Compliance Framework')" class="checkout-btn w-auto px-3">Order Now</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- 2. Australia -->
+			<div class="col-lg-4 col-md-6 mix all student tourist" data-aos="fade-up">
+				<div class="visa-card">
+					<div class="meta-info">
+						<span class="time-badge"><i class="fa-solid fa-clock me-1"></i> 30-45 Days</span>
+						<span class="badge bg-warning text-dark">Australia 🇦🇺</span>
+					</div>
+					<h5 class="text-white fw-bold mb-2">Australia Subclass 500 & Visitor</h5>
+					<p class="text-muted small mb-3">হায়ার স্টাডি প্রোফাইল মূল্যায়ন, জেনুইন স্টুডেন্ট টেস্ট (GST) গাইডলাইন এবং ট্যুরিস্ট এন্ট্রি ক্লিয়ারেন্স ফাইল ইন্টিগ্রেশন।</p>
+					<div class="d-flex align-items-center justify-content-between mt-auto">
+						<div class="cost-display">৳ ৪৫,০০০</div>
+						<button onclick="payWithPayStation(45000, 'Australia Premium Document Node')" class="checkout-btn w-auto px-3">Order Now</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- 3. USA -->
+			<div class="col-lg-4 col-md-6 mix all student tourist" data-aos="fade-up">
+				<div class="visa-card">
+					<div class="meta-info">
+						<span class="time-badge"><i class="fa-solid fa-clock me-1"></i> 20-30 Days</span>
+						<span class="badge bg-primary">United States 🇺🇸</span>
+					</div>
+					<h5 class="text-white fw-bold mb-2">USA F1 Student & B1/B2 Tourist</h5>
+					<p class="text-muted small mb-3">DS-160 পোর্টাল অ্যাপ্লিকেশন সリューション, সেভিস (SEVIS) ফি ম্যানেজমেন্ট এবং আই-২০ (I-20) ওরিয়েন্টেশন সাপোর্ট প্যাকেজ।</p>
+					<div class="d-flex align-items-center justify-content-between mt-auto">
+						<div class="cost-display">৳ ৫৫,০০০</div>
+						<button onclick="payWithPayStation(55000, 'USA Visa Matrix Processing')" class="checkout-btn w-auto px-3">Order Now</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- 4. United Kingdom -->
+			<div class="col-lg-4 col-md-6 mix all student work" data-aos="fade-up">
+				<div class="visa-card">
+					<div class="meta-info">
+						<span class="time-badge"><i class="fa-solid fa-clock me-1"></i> 15-25 Days</span>
+						<span class="badge bg-secondary">United Kingdom 🇬🇧</span>
+					</div>
+					<h5 class="text-white fw-bold mb-2">UK Tier 4 & Visitor Processing</h5>
+					<p class="text-muted small mb-3">যুক্তরাজ্যের ক্যাশ (CAS) লেটার ডকুমেন্টেশন অডিট, স্পনসরশিপ ও ফান্ড ম্যানেজমেন্ট ভেরিফিকেশন এবং স্ট্যান্ডার্ড ভিজিটর ফাইল মেকিং।</p>
+					<div class="d-flex align-items-center justify-content-between mt-auto">
+						<div class="cost-display">৳ ৪০,০০০</div>
+						<button onclick="payWithPayStation(40000, 'UK Framework Verification')" class="checkout-btn w-auto px-3">Order Now</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- 5. Europe / Schengen -->
+			<div class="col-lg-4 col-md-6 mix all tourist work" data-aos="fade-up">
+				<div class="visa-card">
+					<div class="meta-info">
+						<span class="time-badge"><i class="fa-solid fa-clock me-1"></i> 35-50 Days</span>
+						<span class="badge bg-info text-dark">Schengen 🇪🇺</span>
+					</div>
+					<h5 class="text-white fw-bold mb-2">Schengen Tour & Work Node</h5>
+					<p class="text-muted small mb-3">ইউরোপীয় অঞ্চলের ২৬টি দেশের জন্য কভারিং লেটার স্ট্রাকচারিং, ট্রাভেল ইন্স্যুরেন্স মেলাককরণ এবং ভিএফএস গাইডলাইন।</p>
+					<div class="d-flex align-items-center justify-content-between mt-auto">
+						<div class="cost-display">৳ ৫০,০০০</div>
+						<button onclick="payWithPayStation(50000, 'Schengen Gateway Compliance')" class="checkout-btn w-auto px-3">Order Now</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- LIVE CUSTOMER REAL-TIME REVIEWS -->
+	<section id="reviews" class="container py-4 my-4">
+		<div class="text-center mb-4" data-aos="fade-up">
+			<h3 class="fw-bold font-monospace text-white">CLIENT LOG FEEDBACK</h3>
+		</div>
+		<div class="row g-3">
+			<div class="col-md-4" data-aos="fade-right">
+				<div class="review-card">
+					<div class="star-rating"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+					<p class="text-light small mb-2">"কানাডা স্টুডেন্ট ভিসার ফাইল প্রসেসিং এবং ফান্ড রেডি করার গাইডলাইন ওনাদের অসাধারণ ছিল। অবশেষে ভিসা পেয়েছি!"</p>
+					<div class="text-info fw-bold style-font-sub" style="font-size: 11px;">- আরিয়ান আহমেদ (ঢাকা)</div>
+				</div>
+			</div>
+			<div class="col-md-4" data-aos="fade-up">
+				<div class="review-card">
+					<div class="star-rating"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+					<p class="text-light small mb-2">"অস্ট্রেলিয়ার সাবক্লাস ৫০০ এর জিএসটি পেপারস রেডি করার সময় ওনাদের নিখুঁত সার্ভিস আমার খুব ভালো লেগেছে।"</p>
+					<div class="text-info fw-bold style-font-sub" style="font-size: 11px;">- তাসনিম রহমান (সিলেট)</div>
+				</div>
+			</div>
+			<div class="col-md-4" data-aos="fade-left">
+				<div class="review-card">
+					<div class="star-rating"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+					<p class="text-light small mb-2">"ইউএসএ বি১ ভিসা ইন্টারভিউয়ের প্রস্তুতি ওনারা খুব সুন্দর করে করিয়েছেন। থ্যাংকস টু আব্দুর রহমান গ্লোবাল।"</p>
+					<div class="text-info fw-bold style-font-sub" style="font-size: 11px;">- এমডি ইমতিয়াজ (চট্টগ্রাম)</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- FOOTER TERMINAL -->
+	<footer class="py-3 text-center border-top border-secondary mt-5" style="background: #020305;">
+		<p class="m-0 text-muted" style="font-size: 11px; font-family: monospace;">© 2026 <b>Abdur Rahaman Global Travel Service</b>. System Sync Active.</p>
+	</footer>
+
+
+	<!-- 🛠️ ফুল স্ক্রিন ওভারলে সোশ্যাল মিডিয়া ড্যাশবোর্ড (যা এখন যেকোনো পজিশন থেকে উপরে শো করবে) 🛠️ -->
+	<div class="ai-full-overlay" id="aiOverlay">
+		<div class="overlay-title">CONNECT VIA CORE SYSTEM</div>
+		<div class="social-grid">
+			<!-- আপনার নিজস্ব লিংকগুলো নিচে href-এর ভেতরে বসিয়ে দিন -->
+			<a href="https://t.me/yourusername" target="_blank" class="ai-sub-link link-tg"><i class="fa-brands fa-telegram"></i><span class="link-label">Telegram</span></a>
+			<a href="https://wa.me/8801700000000" target="_blank" class="ai-sub-link link-wa"><i class="fa-brands fa-whatsapp"></i><span class="link-label">WhatsApp</span></a>
+			<a href="https://facebook.com/yourpage" target="_blank" class="ai-sub-link link-fb"><i class="fa-brands fa-facebook-f"></i><span class="link-label">Facebook</span></a>
+			<a href="https://instagram.com/yourprofile" target="_blank" class="ai-sub-link link-ig"><i class="fa-brands fa-instagram"></i><span class="link-label">Instagram</span></a>
+			<a href="https://youtube.com/yourchannel" target="_blank" class="ai-sub-link link-yt"><i class="fa-brands fa-youtube"></i><span class="link-label">YouTube</span></a>
+		</div>
+	</div>
+
+	<!-- 🛠️ ফিক্সড পজিশন গ্লোয়িং নিওন এআই মেইন বাটন (ছোট সাইজ) 🛠️ -->
+	<div class="ai-fab-container">
+		<button class="ai-main-btn" id="aiToggleBtn" onclick="toggleAiOverlay()"><i class="fa-solid fa-robot"></i></button>
+	</div>
+
+
+	<!-- SYSTEM SCRIPTS -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+	<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+	<script>
+		// ফুল স্ক্রিন ড্যাশবোর্ড ওপেন ও ক্লোজ করার ফিক্সড ইন্টিগ্রেশন
+		function toggleAiOverlay() {
+			const overlay = document.getElementById("aiOverlay");
+			const btn = document.getElementById("aiToggleBtn");
+			
+			overlay.classList.toggle("open");
+			
+			// বাটন আইকন চেঞ্জ করার জন্য (ক্লিক করলে রোবট থেকে 'X' বা ক্লোজ আইকন হবে)
+			if(overlay.classList.contains("open")) {
+				btn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+			} else {
+				btn.innerHTML = '<i class="fa-solid fa-robot"></i>';
+			}
+		}
+
+		// LIVE FILTER MATRIX FOR VISA CATEGORIES
+		function filterCategory(category, element) {
+			$('.filter-btn').removeClass('active');
+			$(element).addClass('active');
+			if(category === 'all') {
+				$('.mix').fadeIn(400);
+			} else {
+				$('.mix').hide();
+				$('.mix.' + category).fadeIn(400);
+			}
+		}
+
+		// SYSTEM INIT
+		$(document).ready(function() {
+			AOS.init({ duration: 600, once: true });
+			triggerSuccessMessages();
+		});
+
+		// ডাইনামিক সাকসেস মেসেজ পুশ ইভেন্ট
+		const messages = [
+			"🇨🇦 Canada Work Permit File Verified Successfully!",
+			"🎉 bKash Payment Received for USA Appointment Slot Node!",
+			"🇦🇺 Australia Subclass 500 Visa Issued Live!",
+			"🚀 User 'Parvez' Just Initialized a Schengen Invoice Process!",
+			"🇬🇧 UK Visitor Visa Application Uploaded to Secure VFS System!"
+		];
+
+		function triggerSuccessMessages() {
+			setInterval(() => {
+				const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+				const toastHtml = `<div class="success-toast"><i class="fa-solid fa-circle-check text-success"></i> \${randomMsg}</div>`;
+				$('#successBox').append(toastHtml);
+				
+				setTimeout(() => {
+					$('#successBox .success-toast').first().remove();
+				}, 4000);
+			}, 6000);
+		}
+
+		// PAYSTATION INTEGRATION HUB
+		function payWithPayStation(amount, serviceName) {
+			alert("Connecting to Verified PayStation Infrastructure for: " + serviceName + " (Cost: ৳" + amount + ")");
+			window.location.href = "https://sandbox.paystation.com.bd/payment-success/104";
+		}
+	</script>
+</body>
+</html>
